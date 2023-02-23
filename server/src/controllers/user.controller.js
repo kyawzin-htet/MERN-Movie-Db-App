@@ -7,7 +7,6 @@ const signup = async (req, res) => {
       const { username, password, displayName } = req.body;
   
       const checkUser = await userModel.findOne({ username });
-      console.log("username", username)
   
       if (checkUser) return responseHandler.badRequest(res, "username already used");
   
@@ -40,9 +39,9 @@ const signin = async(req, res) =>{
         
         const user = await userModel.findOne({username}).select("username password salt id displayName")
 
-        if(!user) return responseHandler.badrequest(res, "User not found")
+        if(!user) return responseHandler.badRequest(res, "User not found")
 
-        if(!user.validPassword(password)) return responseHandler.badrequest(res, "Wrong password")
+        if(!user.validPassword(password)) return responseHandler.badRequest(res, "Wrong password")
 
         const token = jsonwebtoken.sign(
             { data: user.id},
@@ -71,7 +70,7 @@ const updatePassword = async(req, res) =>{
 
         if(!user) return responseHandler.unauthorize(res)
 
-        if(!user.validPassword(password)) return responseHandler.badrequest(res, "Wrong password")
+        if(!user.validPassword(password)) return responseHandler.badRequest(res, "Wrong password")
 
         user.setPassword(newPassword)
 
